@@ -25,13 +25,16 @@ public class PointsOfInterestController : ControllerBase
   }
 
   [HttpGet("{poiId}")]
-  public ActionResult<IEnumerable<PointsOfInterestDto>> GetPointOfInterest(int cityId, int poiId)
+  public ActionResult<PointsOfInterestDto> GetPointOfInterest(int cityId, int poiId)
   {
     try{
       var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
-      var poi = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
 
-      if (city is null || poi is null) return NotFound();
+      if (city is null) return NotFound();
+
+      var poi = city.PointsOfInterest.FirstOrDefault(p => p.Id == poiId);
+
+      if (poi is null) return NotFound();
 
       return Ok(poi);
     }
