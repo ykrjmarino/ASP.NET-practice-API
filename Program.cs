@@ -1,11 +1,28 @@
+using Microsoft.AspNetCore.StaticFiles;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddControllers();
+
+builder.Services.AddControllers(options =>
+{
+    options.ReturnHttpNotAcceptable = true; //check and wont accept xml
+}).AddXmlDataContractSerializerFormatters(); //gives xml
+
+builder.Services.AddSingleton<FileExtensionContentTypeProvider>(); //allows inject content type provider
+
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
+
+
+
+
 
 var app = builder.Build();
 
